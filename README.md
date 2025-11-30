@@ -6,3 +6,7 @@ Faça os passos comuns para iniciar uma aplicação SpringBoot. Ao iniciar, voc�
 **IMPORTANTE: Libere a porta 8080 antes de rodar.**
 
 Desenvolvido por: Matheus Forte de Melo, Matheus Kuchenbecker, Willian Carlos Busch, Luan Elizeu Santos e Jeferson Machado
+
+## Video e Prints do sistema
+
+-> Colocar aqui
