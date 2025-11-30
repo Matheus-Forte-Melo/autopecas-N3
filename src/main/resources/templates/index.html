@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Painel de Gerenciamento de Oficina</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --cor-fundo-principal: #2c3e50;
+            --cor-fundo-card: #34495e;
+            --cor-texto-principal: #ffffff;
+            --cor-borda: #4a6279;
+            --cor-destaque: #f39c12;
+            --cor-aviso: #e67e22;
+            --cor-perigo: #c0392b;
+        }
+
+        body {
+            background-color: var(--cor-fundo-principal);
+            color: var(--cor-texto-principal);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--cor-destaque);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border-color: var(--cor-borda);
+            opacity: 0.5;
+            margin-bottom: 30px;
+        }
+
+        .container-fluid {
+            padding: 30px;
+        }
+
+        .painel-card {
+            background-color: var(--cor-fundo-card);
+            border: 1px solid var(--cor-borda);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .painel-card h3 {
+            color: var(--cor-texto-principal);
+            border-bottom: 1px solid var(--cor-borda);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .table {
+            color: var(--cor-texto-principal);
+            border: 1px solid var(--cor-borda);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: #5d81a8;
+            color: var(--cor-texto-principal);
+            font-weight: 700;
+        }
+
+        .table th, .table td {
+            color: white;
+            border-color: var(--cor-borda);
+            padding: 12px;
+            vertical-align: middle;
+            background-color: var(--cor-fundo-principal);
+            transition: background-color 0.2s ease;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) td {
+            background-color: #3b5066;
+        }
+
+        .table-hover tbody tr:hover td {
+            background-color: #4a6279;
+            cursor: pointer;
+        }
+
+        .btn {
+            color: white !important;
+            border-radius: 4px;
+            font-weight: 500;
+            padding: 8px 15px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .btn-primary {
+            color: white !important;
+            background-color: var(--cor-destaque);
+            border-color: var(--cor-destaque);
+        }
+        .btn-primary:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+        }
+        .btn-warning {
+            background-color: var(--cor-aviso);
+            border-color: var(--cor-aviso);
+        }
+        .btn-warning:hover {
+            background-color: #d1711e;
+            border-color: #d1711e;
+        }
+        .btn-danger {
+            background-color: var(--cor-perigo);
+            border-color: var(--cor-perigo);
+        }
+        .btn-danger:hover {
+            background-color: #a72e21;
+            border-color: #a72e21;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.85em;
+        }
+
+        .text-muted-custom {
+            color: #b0c4de !important;
+        }
+
+        .highlight-relacionado td {
+            background-color: rgba(243, 156, 18, 0.6) !important;
+            color: white !important;
+            transition: background-color 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+
+    <h1>Cadastro de peças e carros</h1>
+    <div style="margin-right:auto; width:65%; margin-bottom:30px;">
+        <p>Guia rápido para ver todas as features:</p>
+        <ul>
+            <li>Cadastre um carro</li>
+            <li>Cadastre uma peça e sete a compatibilidade para o carro cadastrado</li>
+            <li>Passe o mouse em cima da peça ou do carro. Ao fazer isso um highlight ira aparecer em cima da peça/carro
+                compatível</li>
+            <li>Seja Feliz! Adicione, edite ou delete carros e peças a vontade.</li>
+        </ul>
+        <b>Observação:</b> Este CRUD não utiliza os serviços REST. Os serviços REST estão separados, clique
+        <a style="color: orange; text-decoration: underline;" href="swagger-ui/index.html" target="_blank">aqui</a> para ver os endpoints individuais disponíveis.
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <a href="/add/peca" class="btn btn-primary mb-4">
+                <i class="fas fa-plus-circle"></i> Adicionar Nova Peça
+            </a>
+            <div class="painel-card">
+                <h3><i class="fas fa-gear"></i> Peças</h3>
+
+                <table class="table table-striped table-hover table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="peca : ${listaPecas}"
+                        th:id="'peca-' + ${peca.id}"
+                        th:data-targets="${peca.getIdsCarrosCompativeis()}"
+                        onmouseover="highlightCompativeis(this, 'carro')"
+                        onmouseout="removeHighlight()">
+
+                        <td th:text="${peca.id}"></td>
+                        <td th:text="${peca.nome}"></td>
+                        <td th:text="${peca.categoria}"></td>
+                        <td>
+                            <a th:href="@{/editar/peca/{id}(id=${peca.id})}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a th:href="@{/deletar/peca/{id}(id=${peca.id})}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Confirmar exclusão desta peça?')">
+                                <i class="fas fa-trash-alt"></i> Excluir
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(listaPecas)}">
+                        <td colspan="4" class="text-center text-muted-custom">Nenhuma peça cadastrada.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <a href="/add/carro" class="btn btn-primary mb-4">
+                <i class="fas fa-plus-circle"></i> Adicionar Novo Carro
+            </a>
+            <div class="painel-card">
+                <h3><i class="fas fa-car-alt"></i> Carros</h3>
+
+                <table class="table table-striped table-hover table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Ano</th>
+                        <th>Acoes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="carro : ${listaCarros}"
+                        th:id="'carro-' + ${carro.id}"
+                        th:data-targets="${carro.getIdsPecasCompativeis()}"
+                        onmouseover="highlightCompativeis(this, 'peca')"
+                        onmouseout="removeHighlight()">
+
+                        <td th:text="${carro.id}"></td>
+                        <td th:text="${carro.nome}"></td>
+                        <td th:text="${carro.marca}"></td>
+                        <td th:text="${carro.ano}"></td>
+                        <td>
+                            <a th:href="@{/editar/carro/{id}(id=${carro.id})}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a th:href="@{/deletar/carro/{id}(id=${carro.id})}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Confirmar exclusão deste veículo?')">
+                                <i class="fas fa-trash-alt"></i> Excluir
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(listaCarros)}">
+                        <td colspan="5" class="text-center text-muted-custom">Nenhum carro cadastrado.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let highlightedElements = [];
+
+    function highlightCompativeis(element, prefixoDestino) {
+        removeHighlight();
+
+        const idsString = element.getAttribute('data-targets');
+        if (!idsString || idsString.trim().length === 0) return;
+
+        const ids = idsString
+            .split(',')
+            .map(id => id.trim())
+            .filter(id => id !== "" && !isNaN(id));
+
+        ids.forEach(id => {
+            const targetId = `${prefixoDestino}-${id}`;
+            const targetRow = document.getElementById(targetId);
+
+            if (targetRow) {
+                targetRow.classList.add('highlight-relacionado');
+                highlightedElements.push(targetRow);
+            }
+        });
+    }
+
+    function removeHighlight() {
+        highlightedElements.forEach(row => {
+            row.classList.remove('highlight-relacionado');
+        });
+        highlightedElements = [];
+    }
+</script>
+</body>
+</html>
