@@ -11,4 +11,5 @@ Desenvolvido por: Matheus Forte de Melo, Matheus Kuchenbecker, Willian Carlos Bu
 
 Clique na imagem abaixo para ser direcionado à demonstração em vídeo.
 
-[![Watch the video](https://github.com/user-attachments/assets/5f75aade-d37f-4734-bbe8-9245be246ddb)]([https://youtu.be/vt5fpE0bzSY](https://www.youtube.com/watch?v=O05aKlztL58))
+[![Assista ao vídeo](https://github.com/user-attachments/assets/5f75aade-d37f-4734-bbe8-9245be246ddb)](https://www.youtube.com/watch?v=O05aKlztL58)
+
